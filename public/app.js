@@ -302,10 +302,12 @@
   const settingsModal = document.getElementById('settingsModal');
   const slotList = document.getElementById('slotList');
   const sHost = document.getElementById('sHost');
+  const sBackend = document.getElementById('sBackend');
   const sImageModel = document.getElementById('sImageModel');
   const settingsMsg = document.getElementById('settingsMsg');
   let allModels = [];
   let currentSlots = [];
+  let currentBackend = 'all';
 
   function fmtCtx(c) { if (!c) return ''; if (c >= 1e6) return (c / 1e6).toFixed(0) + 'M'; if (c >= 1000) return Math.round(c / 1000) + 'K'; return String(c); }
 
@@ -320,6 +322,7 @@
   function fillModelSelect(sel, current, visionOnly) {
     sel.innerHTML = '';
     for (const m of allModels) {
+      if (currentBackend !== 'all' && m.provider !== currentBackend) continue;
       if (visionOnly && !m.vision) continue;
       const o = modelOption(m);
       o.selected = m.id === current;
@@ -366,6 +369,18 @@
     for (const s of currentSlots) slotList.appendChild(makeSlotRow(s));
   }
 
+  function populateBackend(providers) {
+    sBackend.innerHTML = '';
+    const list = ['all', ...(providers || [])];
+    for (const p of list) {
+      const o = document.createElement('option');
+      o.value = p;
+      o.textContent = p === 'all' ? 'All providers' : p;
+      o.selected = p === currentBackend;
+      sBackend.appendChild(o);
+    }
+  }
+
   async function openSettings() {
     settingsMsg.textContent = ''; settingsMsg.className = 'settings-msg';
     try {
@@ -376,6 +391,7 @@
       allModels = m.models || [];
       currentSlots = s.settings.slots;
       sHost.value = s.settings.ollamaHost || 'http://localhost:11434';
+      populateBackend(s.settings.providers);
       renderSlots();
       fillModelSelect(sImageModel, s.settings.imageModel, true);
       document.getElementById('sWorkspace').value = s.settings.workspace || '';
@@ -388,6 +404,15 @@
     }
   }
   function closeSettings() { settingsModal.classList.add('hidden'); }
+
+  sBackend.addEventListener('change', () => {
+    currentBackend = sBackend.value;
+    for (const row of slotList.children) {
+      const sel = row.querySelector('.smodel');
+      if (sel) fillModelSelect(sel, sel.value, false);
+    }
+    fillModelSelect(sImageModel, sImageModel.value, true);
+  });
 
   settingsBtn.addEventListener('click', openSettings);
   document.getElementById('settingsClose').addEventListener('click', closeSettings);
