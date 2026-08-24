@@ -14,17 +14,23 @@ execSync(
   `npx electron-packager . FusionStudio --platform=${platform} --arch=${arch} --asar=false --out=${out} --overwrite --ignore "dist" --ignore "workspace" --ignore ".git"`,
   { stdio: 'inherit' }
 );
-execSync(`node scripts/fix-bundle.js ${out}/${appDir}/resources/app`, { stdio: 'inherit' });
+
+// macOS builds a .app bundle; resources live inside it.
+const appResources = platform === 'darwin'
+  ? `${out}/${appDir}/FusionStudio.app/Contents/Resources/app`
+  : `${out}/${appDir}/resources/app`;
+execSync(`node scripts/fix-bundle.js ${appResources}`, { stdio: 'inherit' });
 
 // Zip the built app into a single archive for release upload.
 const zipName = `fusion-studio-${platform}-${arch}.zip`;
+const zipDir = platform === 'darwin' ? `${out}/${appDir}/FusionStudio.app` : `${out}/${appDir}`;
 if (platform === 'win32') {
   execSync(
-    `powershell -NoProfile -Command "Compress-Archive -Path '${out}\\${appDir}\\*' -DestinationPath '${zipName}' -Force"`,
+    `powershell -NoProfile -Command "Compress-Archive -Path '${zipDir}\\*' -DestinationPath '${zipName}' -Force"`,
     { stdio: 'inherit' }
   );
 } else {
-  execSync(`cd ${out}/${appDir} && zip -r ../../${zipName} .`, { stdio: 'inherit' });
+  execSync(`cd ${zipDir} && zip -r ../../${zipName} .`, { stdio: 'inherit' });
 }
 
-console.log('packaged ->', path.join(out, appDir), '=>', zipName);
+console.log('packaged ->', zipDir, '=>', zipName);
