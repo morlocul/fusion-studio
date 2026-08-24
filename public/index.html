@@ -73,6 +73,13 @@
           <label class="field"><span>Mistral</span><input id="pk_mistral" type="password" placeholder="..." autocomplete="off" /></label>
           <label class="field"><span>OpenRouter</span><input id="pk_openrouter" type="password" placeholder="sk-or-..." autocomplete="off" /></label>
           <p class="hint">Paste your provider API key above - no extra window, no browser login. Keys are saved to pi's <code>auth.json</code> and the provider's models appear automatically.</p>
+          <div class="login-row">
+            <span class="login-label">Or use your subscription (no API key, in your browser):</span>
+            <button class="btn login-btn" data-login="anthropic">Claude</button>
+            <button class="btn login-btn" data-login="openai-codex">ChatGPT / Codex</button>
+            <button class="btn login-btn" data-login="github-copilot">Copilot</button>
+          </div>
+          <p id="loginMsg" class="hint"></p>
         </section>
         <section>
           <h3>Slots</h3>

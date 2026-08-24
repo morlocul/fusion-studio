@@ -432,4 +432,24 @@
 
   settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) closeSettings(); });
 
+  // Subscription login buttons (browser OAuth, no API key, no terminal)
+  document.querySelectorAll('.login-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const provider = btn.dataset.login;
+      const msg = document.getElementById('loginMsg');
+      msg.textContent = 'Opening ' + provider + ' sign-in in your browser...';
+      msg.className = 'hint';
+      btn.disabled = true;
+      try {
+        const r = await fetch('/api/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ provider }) });
+        const j = await r.json();
+        msg.textContent = j.ok ? (j.note || 'Complete sign-in in the browser.') : ('Error: ' + (j.error || ''));
+        msg.className = j.ok ? 'hint' : 'settings-msg err';
+      } catch (err) {
+        msg.textContent = 'Error: ' + err.message;
+        msg.className = 'settings-msg err';
+      } finally { btn.disabled = false; }
+    });
+  });
+
 })();

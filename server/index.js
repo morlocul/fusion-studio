@@ -136,12 +136,15 @@ app.get('/api/config', (req, res) => {
   res.json({ slots: config.slots, imageModel: visionModel(), workspace: config.workspaceAbs });
 });
 
-// ---- /api/login - launch pi's subscription login (opens browser) ----
+// ---- /api/login - subscription login (Claude/Codex/Copilot) in the browser ----
 app.post('/api/login', (req, res) => {
   const provider = req.body && req.body.provider;
   if (!provider) return res.status(400).json({ ok: false, error: 'provider required' });
-  loginSdk.launchLogin(config, provider);
-  res.json({ ok: true, started: true, provider, note: 'A pi login window opened - complete the sign-in in the browser, then close that window. The app picks it up automatically.' });
+  loginSdk.login(config, provider).then(
+    () => console.log('Login done for', provider),
+    (e) => console.error('Login failed for', provider, e.message),
+  );
+  res.json({ ok: true, started: true, provider, note: 'The provider login page opened in your browser. Sign in there, then return here - the app picks up the credentials automatically. No API key, no terminal.' });
 });
 
 // ---- /api/models - available models across all pi providers ----
