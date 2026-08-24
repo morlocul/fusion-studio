@@ -11,6 +11,7 @@ const ollama = require('./ollama');
 const catalog = require('./catalog');
 const auth = require('./auth');
 const loginSdk = require('./login');
+const cliHosts = require('./cli');
 
 // ---- config ----
 let config;
@@ -161,6 +162,7 @@ app.get('/api/settings', async (req, res) => {
     ollamaHost: config.ollamaHost,
     imageModel: config.imageModel,
     permissionMode: config.permissionMode || 'full',
+    cliHost: config.cliHost || '',
     workspace: config.workspaceAbs,
     slots: config.slots,
     authJson: auth.authJsonPath(config),
@@ -177,6 +179,7 @@ app.post('/api/settings', async (req, res) => {
   const apiKeys = body.apiKeys;
   const workspace = body.workspace;
   const permissionMode = body.permissionMode;
+  const cliHost = body.cliHost;
 
   if (Array.isArray(slots)) {
     if (slots.length < 2 || slots.length > 5) {
@@ -209,11 +212,12 @@ app.post('/api/settings', async (req, res) => {
     fs.mkdirSync(config.workspaceAbs, { recursive: true });
   }
   if (['plan', 'workspace', 'full'].includes(permissionMode)) config.permissionMode = permissionMode;
+  if (typeof cliHost === 'string' && (cliHost === '' || cliHosts.CLI_HOSTS.includes(cliHost))) config.cliHost = cliHost;
 
   try { fs.writeFileSync(path.join(__dirname, 'config.json'), JSON.stringify(config, null, 2)); }
   catch (e) { return res.status(500).json({ ok: false, error: 'Could not save: ' + e.message }); }
 
-  res.json({ ok: true, settings: config.slots, imageModel: config.imageModel, ollamaHost: config.ollamaHost, workspace: config.workspaceAbs, permissionMode: config.permissionMode });
+  res.json({ ok: true, settings: config.slots, imageModel: config.imageModel, ollamaHost: config.ollamaHost, workspace: config.workspaceAbs, permissionMode: config.permissionMode, cliHost: config.cliHost });
 });
 
 // ---- /api/chat - Main agent, streaming ----
@@ -227,11 +231,21 @@ app.post('/api/chat', upload.array('files', 12), async (req, res) => {
   const primary = config.slots.find((s) => s.role === 'primary') || config.slots[0];
   const hasImages = att.imageFiles.length > 0;
   // Images go DIRECTLY to a vision model; text-only turns use the primary builder.
-  const model = hasImages ? config.imageModel : primary.model;
+  const model = config.cliHost ? `cli:${config.cliHost}` : (hasImages ? config.imageModel : primary.model);
   send({ type: 'meta', slot: 'main', model });
 
   const prompt = buildPrompt(message, att); // vision model sees the image itself
   const sessionId = req.body && req.body.sessionId;
+
+  // If a CLI host is selected (claude/codex/gemini), run that CLI directly.
+  if (cliHosts.CLI_HOSTS.includes(config.cliHost)) {
+    const out = await cliHosts.runCli(config.cliHost, prompt, {
+      mode: config.permissionMode,
+      onStdout: (d) => send({ type: 'delta', slot: 'main', text: d }),
+    });
+    send({ type: 'done', slot: 'main', code: out.code });
+    return res.end();
+  }
 
   const { child, done } = run(model, {
     config,

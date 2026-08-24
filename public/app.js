@@ -371,14 +371,15 @@
 
   function populateBackend(providers) {
     sBackend.innerHTML = '';
-    const list = ['all', ...(providers || [])];
-    for (const p of list) {
-      const o = document.createElement('option');
-      o.value = p;
-      o.textContent = p === 'all' ? 'All providers' : p;
-      o.selected = p === currentBackend;
-      sBackend.appendChild(o);
-    }
+    const add = (v, label) => { const o = document.createElement('option'); o.value = v; o.textContent = label; o.selected = v === currentBackend; sBackend.appendChild(o); };
+    add('all', 'All providers');
+    for (const p of (providers || [])) add(p, p + ' (pi)');
+    const sep = document.createElement('option');
+    sep.disabled = true; sep.textContent = '--- CLI hosts ---';
+    sBackend.appendChild(sep);
+    add('claude', 'claude CLI');
+    add('codex', 'codex CLI');
+    add('gemini', 'gemini CLI');
   }
 
   async function openSettings() {
@@ -405,8 +406,14 @@
   }
   function closeSettings() { settingsModal.classList.add('hidden'); }
 
-  sBackend.addEventListener('change', () => {
+  sBackend.addEventListener('change', async () => {
     currentBackend = sBackend.value;
+    const cli = ['claude', 'codex', 'gemini'].includes(currentBackend) ? currentBackend : '';
+    if (cli) {
+      document.getElementById('loginMsg').textContent = 'Host: ' + cli + ' CLI - the chat uses this CLI (with its own login).';
+      document.getElementById('loginMsg').className = 'hint';
+    }
+    await fetch('/api/settings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ cliHost: cli }) }).catch(() => {});
     for (const row of slotList.children) {
       const sel = row.querySelector('.smodel');
       if (sel) fillModelSelect(sel, sel.value, false);

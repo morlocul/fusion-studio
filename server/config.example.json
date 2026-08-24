@@ -8,6 +8,7 @@
   "modelsJson": "",
   "imageModel": "ollama/qwen3.8:27b-128k",
   "permissionMode": "full",
+  "cliHost": "",
   "slots": [
     { "name": "arch", "model": "ollama/qwen3.5:397b-cloud", "role": "architect", "color": "#A78BFA", "vision": true },
     { "name": "main", "model": "ollama/deepseek-v4-pro:cloud", "role": "primary", "color": "#F59E0B", "vision": false },
