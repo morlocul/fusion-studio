@@ -1,0 +1,9 @@
+node_modules/
+dist/
+server/config.json
+demo_frames/
+workspace/.uploads/
+workspace/.selftest/
+*.log
+FusionStudio.exe
+start.bat

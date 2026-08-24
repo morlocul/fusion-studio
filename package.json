@@ -1,0 +1,27 @@
+{
+  "name": "fusion-studio",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "commonjs",
+  "description": "Fusion Studio - multi-model fusion chat (web + desktop) using pi and Ollama, with file attachments",
+  "main": "desktop/main.js",
+  "bin": { "fusion": "cli.js" },
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node test/smoke.test.js",
+    "desktop": "electron .",
+    "dist": "electron-packager . FusionStudio --platform=win32 --arch=x64 --asar=false --out=dist --overwrite --ignore \"dist\" --ignore \"workspace\" --ignore \".git\" && node scripts/fix-bundle.js dist\\FusionStudio-win32-x64\\resources\\app"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mammoth": "^1.8.0",
+    "multer": "^1.4.5-lts.1",
+    "pdfjs-dist": "^6.2.108",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "electron": "^43.4.1",
+    "electron-packager": "^17.1.2"
+  }
+}

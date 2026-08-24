@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fusion Studio</title>
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sb-brand"><span class="sb-logo">✦</span> Fusion Studio</div>
+      <div class="sb-section">Modele</div>
+      <nav id="channels" class="sb-channels" aria-label="Modele active"></nav>
+      <div class="sb-spacer"></div>
+      <button id="settingsBtn" class="sb-settings" title="Settings">⚙ Settings</button>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="ws"><span class="dot-run" id="runDot"></span><span id="workspaceInfo">…</span></div>
+        <div class="top-actions">
+          <span class="mode-chip"><input type="checkbox" id="fusionMode" /><label for="fusionMode">Fusion</label></span>
+          <span class="mode-chip" id="mergeWrap" style="display:none"><input type="checkbox" id="mergeCheck" checked /><label for="mergeCheck">Merge</label></span>
+        </div>
+      </header>
+
+      <main id="chat" class="chat"></main>
+
+      <footer class="composer">
+        <div id="attachments" class="attachments"></div>
+        <div class="composer-row">
+          <button id="attachBtn" class="icon-btn" title="Attach files (images, pdf, docx, xlsx, txt)">📎</button>
+          <textarea id="input" rows="1" placeholder="Type a message…"></textarea>
+          <button id="sendBtn" class="send-btn" title="Send">➤</button>
+        </div>
+        <div class="composer-hint">Enter to send · Shift+Enter new line · attach images/pdf/docx/xlsx</div>
+      </footer>
+    </div>
+  </div>
+
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-panel">
+      <div class="modal-head"><span>⚙ Settings</span><button id="settingsClose" class="icon-btn small">✕</button></div>
+      <div class="modal-body">
+        <section>
+          <h3>Ollama</h3>
+          <label class="field"><span>Host</span><input id="sHost" type="text" placeholder="http://localhost:11434" /></label>
+          <p class="hint">Ollama needs no API keys. If you use a remote host, enter its address here.</p>
+        </section>
+        <section>
+          <h3>Workspace &amp; access</h3>
+          <label class="field"><span>Workspace</span><input id="sWorkspace" type="text" placeholder="C:\path\to\folder" /></label>
+          <label class="field"><span>Access</span>
+            <select id="sPermission">
+              <option value="plan">Plan — read only</option>
+              <option value="workspace">Workspace — edit files here</option>
+              <option value="full">Full access — all tools</option>
+            </select>
+          </label>
+          <p class="hint">Plan = the agent only reads. Workspace = it can edit files inside the folder. Full access = all tools (shell included).</p>
+        </section>
+        <section>
+          <h3>Vision model (for images)</h3>
+          <label class="field"><span>Vision model</span><select id="sImageModel"></select></label>
+        </section>
+        <section>
+          <h3>Providers &amp; API keys</h3>
+          <label class="field"><span>OpenAI</span><input id="pk_openai" type="password" placeholder="sk-..." autocomplete="off" /></label>
+          <label class="field"><span>Anthropic</span><input id="pk_anthropic" type="password" placeholder="sk-ant-..." autocomplete="off" /></label>
+          <label class="field"><span>Gemini</span><input id="pk_google" type="password" placeholder="AIza..." autocomplete="off" /></label>
+          <label class="field"><span>Groq</span><input id="pk_groq" type="password" placeholder="gsk_..." autocomplete="off" /></label>
+          <label class="field"><span>Mistral</span><input id="pk_mistral" type="password" placeholder="..." autocomplete="off" /></label>
+          <label class="field"><span>OpenRouter</span><input id="pk_openrouter" type="password" placeholder="sk-or-..." autocomplete="off" /></label>
+          <p class="hint">Paste your provider API key above — no extra window, no browser login. Keys are saved to pi's <code>auth.json</code> and the provider's models appear automatically.</p>
+        </section>
+        <section>
+          <h3>Slots</h3>
+          <div id="slotList"></div>
+          <button id="addSlotBtn" class="btn">+ Add slot</button>
+        </section>
+        <p class="note">Rules: 2–5 slots, exactly one <b>architect</b> and one <b>primary</b> (Main). Models marked <span class="vbadge">👁 vision</span> can see images directly.</p>
+      </div>
+      <div class="modal-foot">
+        <button id="settingsCancel" class="btn">Cancel</button>
+        <button id="settingsSave" class="btn primary">Save</button>
+      </div>
+      <div id="settingsMsg" class="settings-msg"></div>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" multiple hidden />
+  <script src="/app.js"></script>
+</body>
+</html>

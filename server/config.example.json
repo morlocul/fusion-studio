@@ -1,0 +1,16 @@
+{
+  "host": "127.0.0.1",
+  "port": 3090,
+  "piCli": "",
+  "workspace": "workspace",
+  "maxUploadBytes": 52428800,
+  "ollamaHost": "http://localhost:11434",
+  "modelsJson": "",
+  "imageModel": "ollama/qwen3.8:27b-128k",
+  "permissionMode": "full",
+  "slots": [
+    { "name": "arch", "model": "ollama/qwen3.5:397b-cloud", "role": "architect", "color": "#A78BFA", "vision": true },
+    { "name": "main", "model": "ollama/deepseek-v4-pro:cloud", "role": "primary", "color": "#F59E0B", "vision": false },
+    { "name": "kimi", "model": "ollama/kimi-k2.7-code:cloud", "role": "builder", "color": "#22D3EE", "vision": true }
+  ]
+}
