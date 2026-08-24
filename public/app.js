@@ -432,6 +432,26 @@
 
   settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) closeSettings(); });
 
+  // Fetch / refresh the model catalog and repopulate the dropdowns.
+  async function fetchModels() {
+    const msg = document.getElementById('loginMsg');
+    msg.textContent = 'Fetching models...';
+    msg.className = 'hint';
+    try {
+      const j = await (await fetch('/api/models')).json();
+      allModels = j.models || [];
+      for (const row of slotList.children) {
+        const sel = row.querySelector('.smodel');
+        if (sel) fillModelSelect(sel, sel.value, false);
+      }
+      fillModelSelect(sImageModel, sImageModel.value, true);
+      const provs = [...new Set(allModels.map((m) => m.provider))].sort().join(', ');
+      msg.textContent = '✓ ' + allModels.length + ' models from: ' + (provs || '(none)');
+      msg.className = 'settings-msg ok';
+    } catch (e) { msg.textContent = 'Fetch error: ' + e.message; msg.className = 'settings-msg err'; }
+  }
+  document.getElementById('fetchModelsBtn').addEventListener('click', fetchModels);
+
   // Subscription login buttons (browser OAuth, no API key, no terminal)
   document.querySelectorAll('.login-btn').forEach((btn) => {
     btn.addEventListener('click', async () => {
@@ -443,8 +463,22 @@
       try {
         const r = await fetch('/api/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ provider }) });
         const j = await r.json();
-        msg.textContent = j.ok ? (j.note || 'Complete sign-in in the browser.') : ('Error: ' + (j.error || ''));
-        msg.className = j.ok ? 'hint' : 'settings-msg err';
+        if (!j.ok) { msg.textContent = 'Error: ' + (j.error || ''); msg.className = 'settings-msg err'; return; }
+        msg.textContent = 'Sign in in the browser, then wait - detecting your subscription...';
+        for (let i = 0; i < 45; i++) {
+          await new Promise((r2) => setTimeout(r2, 2000));
+          try {
+            const s = await (await fetch('/api/settings')).json();
+            if (s.settings.configuredProviders && s.settings.configuredProviders[provider]) {
+              msg.textContent = '✓ Connected to ' + provider + '! Models updated.';
+              msg.className = 'settings-msg ok';
+              await fetchModels();
+              return;
+            }
+          } catch (e) {}
+        }
+        msg.textContent = 'Timed out waiting for ' + provider + '. Try again, or use an API key.';
+        msg.className = 'hint';
       } catch (err) {
         msg.textContent = 'Error: ' + err.message;
         msg.className = 'settings-msg err';
