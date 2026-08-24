@@ -1,5 +1,5 @@
 'use strict';
-// Fusion Studio — desktop shell (Electron). Embeds the local server in a native window.
+// Fusion Studio - desktop shell (Electron). Embeds the local server in a native window.
 const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 

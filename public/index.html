@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -53,9 +53,9 @@
           <label class="field"><span>Workspace</span><input id="sWorkspace" type="text" placeholder="C:\path\to\folder" /></label>
           <label class="field"><span>Access</span>
             <select id="sPermission">
-              <option value="plan">Plan — read only</option>
-              <option value="workspace">Workspace — edit files here</option>
-              <option value="full">Full access — all tools</option>
+              <option value="plan">Plan - read only</option>
+              <option value="workspace">Workspace - edit files here</option>
+              <option value="full">Full access - all tools</option>
             </select>
           </label>
           <p class="hint">Plan = the agent only reads. Workspace = it can edit files inside the folder. Full access = all tools (shell included).</p>
@@ -72,14 +72,14 @@
           <label class="field"><span>Groq</span><input id="pk_groq" type="password" placeholder="gsk_..." autocomplete="off" /></label>
           <label class="field"><span>Mistral</span><input id="pk_mistral" type="password" placeholder="..." autocomplete="off" /></label>
           <label class="field"><span>OpenRouter</span><input id="pk_openrouter" type="password" placeholder="sk-or-..." autocomplete="off" /></label>
-          <p class="hint">Paste your provider API key above — no extra window, no browser login. Keys are saved to pi's <code>auth.json</code> and the provider's models appear automatically.</p>
+          <p class="hint">Paste your provider API key above - no extra window, no browser login. Keys are saved to pi's <code>auth.json</code> and the provider's models appear automatically.</p>
         </section>
         <section>
           <h3>Slots</h3>
           <div id="slotList"></div>
           <button id="addSlotBtn" class="btn">+ Add slot</button>
         </section>
-        <p class="note">Rules: 2–5 slots, exactly one <b>architect</b> and one <b>primary</b> (Main). Models marked <span class="vbadge">👁 vision</span> can see images directly.</p>
+        <p class="note">Rules: 2-5 slots, exactly one <b>architect</b> and one <b>primary</b> (Main). Models marked <span class="vbadge">👁 vision</span> can see images directly.</p>
       </div>
       <div class="modal-foot">
         <button id="settingsCancel" class="btn">Cancel</button>

@@ -1,5 +1,5 @@
 'use strict';
-// Fusion Studio server — Express + pi (Ollama) + file attachment.
+// Fusion Studio server - Express + pi (Ollama) + file attachment.
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
@@ -94,7 +94,7 @@ async function processFiles(files) {
     } else if (res.kind === 'text') {
       blocks.push(`\n=== Attached file: ${res.sourceName || f.originalname} ===\n${res.text}`);
     } else {
-      blocks.push(`[Attached file: ${f.originalname}] (${res.ext}) — saved at ${res.path}`);
+      blocks.push(`[Attached file: ${f.originalname}] (${res.ext}) - saved at ${res.path}`);
     }
   }
   return { blocks, imageFiles };
@@ -136,21 +136,21 @@ app.get('/api/config', (req, res) => {
   res.json({ slots: config.slots, imageModel: visionModel(), workspace: config.workspaceAbs });
 });
 
-// ---- /api/login — launch pi's subscription login (opens browser) ----
+// ---- /api/login - launch pi's subscription login (opens browser) ----
 app.post('/api/login', (req, res) => {
   const provider = req.body && req.body.provider;
   if (!provider) return res.status(400).json({ ok: false, error: 'provider required' });
   loginSdk.launchLogin(config, provider);
-  res.json({ ok: true, started: true, provider, note: 'A pi login window opened — complete the sign-in in the browser, then close that window. The app picks it up automatically.' });
+  res.json({ ok: true, started: true, provider, note: 'A pi login window opened - complete the sign-in in the browser, then close that window. The app picks it up automatically.' });
 });
 
-// ---- /api/models — available models across all pi providers ----
+// ---- /api/models - available models across all pi providers ----
 app.get('/api/models', async (req, res) => {
   try { res.json({ ok: true, models: await catalog.listModels(config) }); }
   catch (e) { res.status(500).json({ ok: false, error: e.message }); }
 });
 
-// ---- /api/settings — GET current settings, POST to save ----
+// ---- /api/settings - GET current settings, POST to save ----
 app.get('/api/settings', async (req, res) => {
   const models = await catalog.listModels(config);
   const configured = auth.configuredProviders(config);
@@ -213,7 +213,7 @@ app.post('/api/settings', async (req, res) => {
   res.json({ ok: true, settings: config.slots, imageModel: config.imageModel, ollamaHost: config.ollamaHost, workspace: config.workspaceAbs, permissionMode: config.permissionMode });
 });
 
-// ---- /api/chat — Main agent, streaming ----
+// ---- /api/chat - Main agent, streaming ----
 app.post('/api/chat', upload.array('files', 12), async (req, res) => {
   const message = (req.body && (req.body.message || '')) || '';
   const { send } = sse(res);
@@ -244,7 +244,7 @@ app.post('/api/chat', upload.array('files', 12), async (req, res) => {
   return res.end();
 });
 
-// ---- /api/fusion — run each slot read-only in parallel ----
+// ---- /api/fusion - run each slot read-only in parallel ----
 app.post('/api/fusion', upload.array('files', 50), async (req, res) => {
   const message = (req.body && (req.body.message || '')) || '';
   const { send } = sse(res);

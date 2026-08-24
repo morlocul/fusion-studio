@@ -15,7 +15,7 @@ function demoSource() {
     chat.innerHTML = '';
     const mk = (cls, html) => { const el = document.createElement('div'); el.className = 'msg ' + cls; el.innerHTML = html; chat.appendChild(el); };
     mk('user', 'How do you run several local models at once and combine their answers?');
-    mk('assistant', '<div class="who">main</div>Fusion Studio runs every configured model <b>in parallel</b> on the same prompt, then merges their answers — <i>AND, not OR</i>. Just toggle <b>Fusion</b> and the slots work together on your task.');
+    mk('assistant', '<div class="who">main</div>Fusion Studio runs every configured model <b>in parallel</b> on the same prompt, then merges their answers - <i>AND, not OR</i>. Just toggle <b>Fusion</b> and the slots work together on your task.');
     const panel = document.createElement('div');
     panel.className = 'fusion-panel';
     panel.innerHTML =
@@ -24,7 +24,7 @@ function demoSource() {
       '<div class="slot-block"><div class="slot-title" style="color:#F59E0B">main</div><div class="slot-out">Main handles the interactive chat and the actual coding work with its tools.</div></div>' +
       '<div class="slot-block"><div class="slot-title" style="color:#22D3EE">kimi</div><div class="slot-out">A second builder gives an independent opinion on the same problem.</div></div>' +
       '</div>' +
-      '<div class="merge-block"><div class="slot-title" style="color:#3fb950">\u2605 Final merge</div><div class="slot-out">All three models agree: run them together and fuse — AND, not OR.</div></div>';
+      '<div class="merge-block"><div class="slot-title" style="color:#3fb950">\u2605 Final merge</div><div class="slot-out">All three models agree: run them together and fuse - AND, not OR.</div></div>';
     chat.appendChild(panel);
   })();`;
 }

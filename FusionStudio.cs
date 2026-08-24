@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-// Fusion Studio launcher — starts the web server and opens the browser.
+// Fusion Studio launcher - starts the web server and opens the browser.
 class FusionStudio
 {
     static string Repo;

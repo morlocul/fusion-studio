@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Fusion Studio CLI — a thin HTTP client of the local server: talks to the
+// Fusion Studio CLI - a thin HTTP client of the local server: talks to the
 // running Fusion Studio on http://127.0.0.1:3090.
 //
 //   node cli.js chat   "how do I X?"        # talk to the Main model
@@ -48,7 +48,7 @@ async function streamChat(pathname, message) {
 
 async function main() {
   if (!cmd || cmd === 'help' || cmd === '--help' || cmd === '-h') {
-    console.log('Fusion Studio CLI — talks to the local server on ' + BASE);
+    console.log('Fusion Studio CLI - talks to the local server on ' + BASE);
     console.log('  chat   "<msg>"          talk to the Main model');
     console.log('  fusion "<msg>"          run all slots in parallel + merge');
     console.log('  models                  list available models');

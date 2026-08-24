@@ -1,11 +1,11 @@
 # Fusion Studio
 
 A local, self-hosted **multi-model fusion studio**: a chat app (web + desktop) that runs
-**several models at the same time** on one task and fuses their answers — *AND, not OR*.
+**several models at the same time** on one task and fuses their answers - *AND, not OR*.
 
 Built on top of:
 - **[pi](https://pi.dev/)** (the coding agent) as the agent engine
-- **[Ollama](https://ollama.com/)** as the model backend — **no cloud API keys required**
+- **[Ollama](https://ollama.com/)** as the model backend - **no cloud API keys required**
 - the multi-model **fusion** concept from **[fusion-harness](https://github.com/disler/fusion-harness)**
 - visual identity + layout borrowed from **[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)**
 
@@ -15,23 +15,23 @@ Built on top of:
 [![made with Ollama](https://img.shields.io/badge/made%20with-Ollama-38d2ff)](https://ollama.com)
 
 > **Fusion Studio is not DeepSeek Harness.** DeepSeek Harness runs **one agent** that does the whole job.
-> Fusion Studio runs **2–5 models in parallel** on the same problem and merges their answers.
+> Fusion Studio runs **2-5 models in parallel** on the same problem and merges their answers.
 
 ---
 
 ## Features
 
-- **Main chat** — a conversation with your primary model (DeepSeek V4 Pro via Ollama), with session memory.
-- **Fusion mode** — runs every configured slot **in parallel** (read-only), then a final **merge** by the architect.
-- **Multiple providers** — pick models from any provider pi can see:
-  - **Ollama** (local **or** Ollama Cloud via `:cloud`) — no keys needed
-  - **OpenAI / Anthropic / Gemini / Groq / Mistral / OpenRouter** — paste your **API key** in Settings (⚙); the provider's models appear immediately (no extra window, no browser login)
-- **File attachments** — attach images, PDF, DOCX, XLSX, TXT:
+- **Main chat** - a conversation with your primary model (DeepSeek V4 Pro via Ollama), with session memory.
+- **Fusion mode** - runs every configured slot **in parallel** (read-only), then a final **merge** by the architect.
+- **Multiple providers** - pick models from any provider pi can see:
+  - **Ollama** (local **or** Ollama Cloud via `:cloud`) - no keys needed
+  - **OpenAI / Anthropic / Gemini / Groq / Mistral / OpenRouter** - paste your **API key** in Settings (⚙); the provider's models appear immediately (no extra window, no browser login)
+- **File attachments** - attach images, PDF, DOCX, XLSX, TXT:
   - images → sent **directly to a vision model** (e.g. local `qwen3.8:27b-128k`)
   - pdf/docx/xlsx → text extracted and injected into the prompt
-- **Agentic** — the agent has tools (read / bash / edit / write) and works in a local `workspace/` folder.
-- **Settings UI** — pick models, roles, vision model and Ollama host from the GUI (⚙), no config edits needed.
-- **Web and desktop** — run it in the browser, or as a standalone Electron window.
+- **Agentic** - the agent has tools (read / bash / edit / write) and works in a local `workspace/` folder.
+- **Settings UI** - pick models, roles, vision model and Ollama host from the GUI (⚙), no config edits needed.
+- **Web and desktop** - run it in the browser, or as a standalone Electron window.
 
 ## Demo
 
@@ -85,6 +85,8 @@ npm run desktop
 
 ### CLI (thin client of the local server)
 
+The CLI talks to a **running** Fusion Studio server. Start it first (`npm start` or the desktop app), then:
+
 ```
 node cli.js chat   "how do I X?"        # talk to the Main model
 node cli.js fusion "compare X and Y"    # run all slots in parallel + merge
@@ -135,12 +137,29 @@ Edit `server/config.json`:
 
 - `role: "primary"` → the Main chat model
 - `role: "architect"` → merges opinions in fusion mode
-- exactly one architect + one primary, 2–5 slots total
+- exactly one architect + one primary, 2-5 slots total
 - vision-capable models (e.g. `qwen3.8:27b-128k`, `gemma4:12b`, `minimax-m3:cloud`) see images directly
 
 Optional fields:
-- `piCli` — absolute path to pi's `dist/bundle/cli.js`. If empty, the app runs `pi` from your PATH.
-- `modelsJson` — absolute path to pi's `~/.pi/agent/models.json` (used to read vision/context metadata and update the Ollama host). If empty, model metadata comes straight from Ollama.
+- `piCli` - absolute path to pi's `dist/bundle/cli.js`. If empty, the app runs `pi` from your PATH.
+- `modelsJson` - absolute path to pi's `~/.pi/agent/models.json` (used to read vision/context metadata and update the Ollama host). If empty, model metadata comes straight from Ollama.
+
+## Providers & API keys
+
+To use models from OpenAI, Anthropic, Gemini, Groq, Mistral or OpenRouter:
+
+1. Open the app, go to **⚙ Settings → Providers & API keys**.
+2. Paste your provider's API key and click **Save** (keys are stored in pi's `auth.json`).
+3. Reopen Settings - the provider's models now appear in the slot/model dropdowns.
+
+Ollama needs no key (local models or `:cloud` via ollama.com).
+
+## Troubleshooting
+
+- **Server won't start / port 3090 busy** - stop any other Fusion Studio instance (only one server at a time).
+- **"pi not found"** - `pi` must be on your PATH, or set its absolute path in `config.json` (`piCli`).
+- **No models listed** - Ollama must be running on `ollamaHost`; for cloud providers, add an API key first.
+- **CLI does nothing** - make sure the server is running (`npm start` or the desktop app) before calling `node cli.js ...`.
 
 ## Project structure
 
@@ -161,11 +180,11 @@ fusion-studio/
 
 ## Tech stack
 
-- **Express** — HTTP/SSE server
-- **pi** — agentic coding engine (sub-processed per request)
-- **Ollama** — local/cloud model backend
-- **pdfjs-dist / mammoth / xlsx** — file text extraction
-- **Electron** — desktop wrapper
+- **Express** - HTTP/SSE server
+- **pi** - agentic coding engine (sub-processed per request)
+- **Ollama** - local/cloud model backend
+- **pdfjs-dist / mammoth / xlsx** - file text extraction
+- **Electron** - desktop wrapper
 
 ## License & Attribution
 
@@ -176,5 +195,5 @@ It builds on the **fusion concept** from
 and the **visual identity / layout** of
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (MIT, © 2026 DeepSeek).
 Both are MIT-licensed; see [`NOTICE.md`](NOTICE.md) for the full third-party notices
-and copyright lines. Fusion Studio is an original implementation — no substantial
+and copyright lines. Fusion Studio is an original implementation - no substantial
 code was copied from these projects.

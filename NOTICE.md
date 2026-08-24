@@ -2,8 +2,8 @@
 
 This project builds on ideas and visual direction from several open-source
 projects. We are grateful to their authors and preserve their copyright
-notices below. **Fusion Studio is an original implementation** — we did not copy
-substantial code from these projects — but we borrow the **concept** (multi-model
+notices below. **Fusion Studio is an original implementation** - we did not copy
+substantial code from these projects - but we borrow the **concept** (multi-model
 fusion) and the **visual identity / layout** from them, so they are credited here.
 
 ---
@@ -12,7 +12,7 @@ fusion) and the **visual identity / layout** from them, so they are credited her
 
 - Project: <https://github.com/disler/fusion-harness>
 - License: **MIT**
-- Used for: the multi-model **fusion** concept (AND, not OR — running several
+- Used for: the multi-model **fusion** concept (AND, not OR - running several
   models in parallel and merging their answers).
 - Author's copyright notice (as required by the MIT license):
 
@@ -42,7 +42,7 @@ SOFTWARE.
 
 ---
 
-## DeepSeek Harness — **Project**: <https://github.com/deepseek-ai/deepseek-harness>
+## DeepSeek Harness - **Project**: <https://github.com/deepseek-ai/deepseek-harness>
 - License: MIT
 - Used in: the **visual identity and layout** (dark warm-neutral palette,
   `#4D6BFE` accent, sidebar + chat structure) of the web/desktop UI.
@@ -77,11 +77,11 @@ SOFTWARE.
 ## Runtime / engine dependencies
 
 Fusion Studio runs and orchestrates the following third-party tools (each has
-its own license — see the respective project):
+its own license - see the respective project):
 
-- **pi** — the coding-agent engine (<https://pi.dev/>), from
+- **pi** - the coding-agent engine (<https://pi.dev/>), from
   `@earendil-works/pi-coding-agent`, spawned as a sub-process.
-- **Ollama** — the model backend (<https://ollama.com/>).
+- **Ollama** - the model backend (<https://ollama.com/>).
 - npm packages: `express`, `multer`, `mammoth`, `pdfjs-dist`, `xlsx`,
   `electron`, `electron-packager` (see `package.json` and each package's
   license).

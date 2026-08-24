@@ -207,7 +207,7 @@
           state.panel.className = 'fusion-panel';
           const head = document.createElement('div');
           head.className = 'fp-head';
-          head.textContent = '✦ Fusion — ' + (ev.slots || []).join(' + ');
+          head.textContent = '✦ Fusion - ' + (ev.slots || []).join(' + ');
           state.panel.appendChild(head);
           const body = document.createElement('div');
           body.className = 'fp-body';

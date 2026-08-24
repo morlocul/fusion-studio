@@ -1,7 +1,7 @@
 'use strict';
 // Captures a demo GIF sequence: opens the app, injects an animated demo state
 // (streaming message + fusion panel) per frame, saves PNG frames. No personal
-// data — the workspace label is replaced with a generic placeholder.
+// data - the workspace label is replaced with a generic placeholder.
 // Usage: npx electron scripts/gifcapture.js <outDir>
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
@@ -10,7 +10,7 @@ const server = require('../server/index.js');
 
 const OUT = process.argv[2] || path.join(__dirname, '..', 'demo_frames');
 const TOTAL = 30;
-const TEXT = 'Fusion Studio runs several models in parallel on the same task and fuses their answers — AND, not OR.';
+const TEXT = 'Fusion Studio runs several models in parallel on the same task and fuses their answers - AND, not OR.';
 const SLOTS = {
   arch: 'Runs the slots in parallel, then an architect fuses the opinions into one answer.',
   main: 'Main handles the interactive chat and the actual coding work with its tools.',
@@ -32,7 +32,7 @@ function demoJS(frame) {
   const farch = showFusion ? SLOTS.arch.slice(0, Math.floor(SLOTS.arch.length * slotFill(1, 13, 6))) : '';
   const fmain = showFusion ? SLOTS.main.slice(0, Math.floor(SLOTS.main.length * slotFill(1, 16, 6))) : '';
   const fkimi = showFusion ? SLOTS.kimi.slice(0, Math.floor(SLOTS.kimi.length * slotFill(1, 19, 6))) : '';
-  const fmerge = showMerge ? 'All three models agree: run them together and fuse — AND, not OR.' : '';
+  const fmerge = showMerge ? 'All three models agree: run them together and fuse - AND, not OR.' : '';
   const onArch = showFusion && frame >= 13 && frame < 26;
   const onMain = showFusion && frame >= 16 && frame < 26;
   const onKimi = showFusion && frame >= 19 && frame < 26;

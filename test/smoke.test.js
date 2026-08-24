@@ -1,5 +1,5 @@
 'use strict';
-// Lightweight smoke test — no server, no Ollama needed.
+// Lightweight smoke test - no server, no Ollama needed.
 // Verifies the example config schema and that the core modules load.
 const assert = require('assert');
 const fs = require('fs');
