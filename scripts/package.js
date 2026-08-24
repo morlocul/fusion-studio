@@ -16,4 +16,15 @@ execSync(
 );
 execSync(`node scripts/fix-bundle.js ${out}/${appDir}/resources/app`, { stdio: 'inherit' });
 
-console.log('packaged ->', path.join(out, appDir));
+// Zip the built app into a single archive for release upload.
+const zipName = `fusion-studio-${platform}-${arch}.zip`;
+if (platform === 'win32') {
+  execSync(
+    `powershell -NoProfile -Command "Compress-Archive -Path '${out}\\${appDir}\\*' -DestinationPath '${zipName}' -Force"`,
+    { stdio: 'inherit' }
+  );
+} else {
+  execSync(`cd ${out}/${appDir} && zip -r ../../${zipName} .`, { stdio: 'inherit' });
+}
+
+console.log('packaged ->', path.join(out, appDir), '=>', zipName);
